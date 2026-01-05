@@ -32,7 +32,7 @@ function Main() {
                 {/* Search */}
                 <Search />
                 {/* Shortlist */}
-                <Shortlist/>
+                <Shortlist puppies={puppies} liked={liked} setLiked={setLiked} />
             </div>
             {/* Puppies list */}
             <PuppiesList puppies={puppies} liked={liked} setLiked={setLiked} />
