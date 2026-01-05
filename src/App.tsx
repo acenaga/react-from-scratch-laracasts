@@ -9,6 +9,7 @@ import { useState } from "react";
 
 import { puppies } from "./data/puppies"
 import { Puppy } from "./types";
+import { LikedContext } from "./context/liked-context";
 
 
 export function App() {
@@ -27,15 +28,17 @@ function Main() {
     const [liked, setLiked] = useState<Puppy["id"][]>([1,3]);
     return (
         <main>
-            {/* Search & Shortlist */}
-            <div className="mt-24 grid gap-8 sm:grid-cols-2">
-                {/* Search */}
-                <Search />
-                {/* Shortlist */}
-                <Shortlist puppies={puppies} liked={liked} setLiked={setLiked} />
-            </div>
-            {/* Puppies list */}
-            <PuppiesList puppies={puppies} liked={liked} setLiked={setLiked} />
+            <LikedContext value={{ liked, setLiked }}>
+                {/* Search & Shortlist */}
+                <div className="mt-24 grid gap-8 sm:grid-cols-2">
+                    {/* Search */}
+                    <Search />
+                    {/* Shortlist */}
+                    <Shortlist puppies={puppies} />
+                </div>
+                {/* Puppies list */}
+                <PuppiesList puppies={puppies}/>
+            </LikedContext>
             {/* New Puppy form */}
             <NewPuppyForm />
         </main>

@@ -1,17 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
+import { useLiked } from "../context/liked-context";
 import { Puppy } from "../types";
 import { Heart, X } from "lucide-react";
 
+
 export function Shortlist({
     puppies,
-    liked,
-    setLiked
 }: {
     puppies: Puppy[];
-    liked: Puppy["id"][];
-    setLiked: Dispatch<SetStateAction<Puppy["id"][]>>;
 }) {
-
+    const { liked, setLiked } = useLiked();
     return (
         <div>
             <h2 className="flex items-center gap-2 font-medium">
