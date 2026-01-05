@@ -1,10 +1,10 @@
 import { Delete } from "lucide-react";
-import { useRef } from "react";
+import { Dispatch, useRef } from "react";
 export function Search({
     searchQuery, setSearchQuery
 }: {
     searchQuery: string;
-    setSearchQuery: React.Dispatch<React.SetStateAction<string>>
+    setSearchQuery: Dispatch<React.SetStateAction<string>>
 }) {
     const inputRef = useRef(null);
     return (

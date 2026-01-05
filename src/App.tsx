@@ -2,12 +2,12 @@ import { PageWrapper } from "./components/PageWrapper";
 import { Container } from "./components/Container";
 import { Header } from "./components/Header";
 import { Search } from "./components/Search";
-import { Shortlist } from "./components/Shorlist";
+import { Shortlist } from "./components/Shortlist";
 import { PuppiesList } from "./components/PuppiesList";
 import { NewPuppyForm } from "./components/NewPuppyForm";
 import { useState } from "react";
 
-import { puppies } from "./data/puppies"
+import { puppies as PuppiesData } from "./data/puppies"
 import { Puppy } from "./types";
 
 
@@ -26,6 +26,7 @@ export function App() {
 function Main() {
     const [liked, setLiked] = useState<Puppy["id"][]>([1,3]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [puppies, setPuppies] = useState<Puppy[]>(PuppiesData);
     return (
         <main>
             {/* Search & Shortlist */}
@@ -43,7 +44,7 @@ function Main() {
                 setLiked={setLiked}
             />
             {/* New Puppy form */}
-            <NewPuppyForm />
+            <NewPuppyForm puppies={puppies} setPuppies={setPuppies}  />
         </main>
 
     )
