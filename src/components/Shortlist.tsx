@@ -51,8 +51,12 @@ function DeleteButton({ id, setPuppies }: { id: Puppy["id"], setPuppies: Dispatc
             disabled={pending}
             onClick={async () => {
                 isPending(true);
-                const newPuppies = await toggleLikeStatus(id);
-                setPuppies(newPuppies);
+                const updatedPuppy = await toggleLikeStatus(id);
+                setPuppies((prevPups) =>{
+                    return prevPups.map((existingPuppy) =>
+                        existingPuppy.id === updatedPuppy.id ? updatedPuppy : existingPuppy
+                    )
+                });
                 isPending(false);
             }}
         >
