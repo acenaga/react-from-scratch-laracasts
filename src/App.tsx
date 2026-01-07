@@ -5,11 +5,13 @@ import { Search } from "./components/Search";
 import { Shortlist } from "./components/Shortlist";
 import { PuppiesList } from "./components/PuppiesList";
 import { NewPuppyForm } from "./components/NewPuppyForm";
-import { useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 
 import { puppies as PuppiesData } from "./data/puppies"
 import { Puppy } from "./types";
 import { LoaderCircle } from "lucide-react";
+import { getPuppies } from "./queries";
+import { ErrorBoundary } from "react-error-boundary";
 
 
 export function App() {
@@ -30,7 +32,21 @@ function Main() {
     const [puppies, setPuppies] = useState<Puppy[]>(PuppiesData);
     return (
         <main>
-            <ApiPuppies />
+
+                <ErrorBoundary
+                    fallbackRender={({error}) => (
+                        <div className="bg-red-100 p-6 mt-12 shadow ring-black/5">
+                            <p className="text-red-500">{error.message}: {error.details}</p>
+                        </div>
+                    )}>
+                    <Suspense fallback={
+                        <div className="bg-white p-6 mt-12 shadow ring-black/5">
+                            <LoaderCircle className="animate-spin stroke-slate-300" />
+                        </div>
+                    }>
+                        <ApiPuppies />
+                    </Suspense>
+                </ErrorBoundary>
             {/* Search & Shortlist */}
             <div className="mt-24 grid gap-8 sm:grid-cols-2">
                 {/* Search */}
@@ -52,40 +68,14 @@ function Main() {
     )
 }
 
+const puppiesPromise = getPuppies();
+
 function ApiPuppies() {
-    //fetch puppies from api
-    const [apiPuppies, setApiPuppies] = useState<[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
-    useEffect(() => {
-        async function getpuppies() {
-            setIsLoading(true);
-            try {
-                const response = await fetch('http://react-from-scratch-api.test/api/puppies');
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    setError(`${errorData.message}: ${errorData.details}`);
-                    throw errorData
-                }
-                const data = await response.json();
-                //console.log(data);
-                setApiPuppies(data);
-            } catch (error) {
-                console.error(error)
-            }
-            setIsLoading(false);
-        }
-        getpuppies();
-    }, [
-        //re-run the effect
-    ]);
+    const apiPuppies = use(puppiesPromise);
+
     return (
-        <div className="bg-white p-6 mt-12 shadow ring-black/5">
-            {isLoading && <LoaderCircle className="animate-spin stroke-slate-300" /> }
-            {apiPuppies.length > 0 && (
-                <pre>{JSON.stringify(apiPuppies, null, 2)}</pre>
-            )}
-            {error && <p className="text-red-500">Error: {error}</p>}
+        <div className="bg-green-100 p-6 mt-12 shadow ring-black/5">
+            <pre>{JSON.stringify(apiPuppies, null, 2)}</pre>
         </div>
     );
 }
