@@ -1,15 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { toggleLikeStatus } from "../queries";
 import { Puppy } from "../types";
-import { Heart, X } from "lucide-react";
+import { Heart, LoaderCircle, X } from "lucide-react";
 
 export function Shortlist({
     puppies,
-    liked,
-    setLiked
+    setPuppies
 }: {
     puppies: Puppy[];
-    liked: Puppy["id"][];
-    setLiked: Dispatch<SetStateAction<Puppy["id"][]>>;
+    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }) {
 
     return (
@@ -34,18 +33,36 @@ export function Shortlist({
                                     src={puppy.imageUrl}
                                 />
                                 <p className="px-3 text-sm text-slate-800">{puppy.name}</p>
-                                <button className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100"
-                                    onClick={() => setLiked(liked.filter(id => id !== puppy.id))}
-                                >
-                                    <X
-                                        className="lucide lucide-x size-4 stroke-slate-400 group-hover:stroke-red-400"
-                                    />
-                                </button>
+                                <DeleteButton id={puppy.id} setPuppies={setPuppies} />
                             </li>
                         ))
                 }
 
             </ul>
         </div>
+    )
+}
+
+function DeleteButton({ id, setPuppies }: { id: Puppy["id"], setPuppies: Dispatch<SetStateAction<Puppy[]>> }) {
+    const [pending, isPending] = useState(false);
+    return (
+        <button
+            className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100"
+            disabled={pending}
+            onClick={async () => {
+                isPending(true);
+                const newPuppies = await toggleLikeStatus(id);
+                setPuppies(newPuppies);
+                isPending(false);
+            }}
+        >
+            {pending ? (
+                <LoaderCircle className="size-4 animate-spin stroke-slate-300" />
+            ) : (
+                <X
+                    className="lucide lucide-x size-4 stroke-slate-400 group-hover:stroke-red-400"
+                />
+            )}
+        </button>
     )
 }

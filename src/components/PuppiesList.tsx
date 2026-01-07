@@ -3,10 +3,12 @@ import { type Puppy } from "../types/index";
 import { LikeToggle } from "./LikeToggle"
 export function PuppiesList({
     puppies,
-    searchQuery
+    searchQuery,
+    setPuppies
 }: {
     puppies: Puppy[];
     searchQuery: string;
+    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }) {
     return (
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -17,6 +19,7 @@ export function PuppiesList({
                         <PuppyCard
                             key={puppy.id}
                             puppy={puppy}
+                            setPuppies={setPuppies}
                         />
                     ))
             }
@@ -26,8 +29,9 @@ export function PuppiesList({
 }
 type PuppyCardProps = {
     puppy: Puppy;
+    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }
-function PuppyCard({ puppy }: PuppyCardProps) {
+function PuppyCard({ puppy, setPuppies }: PuppyCardProps) {
     return (
         <li key={puppy.id} className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5">
             <img
@@ -41,7 +45,7 @@ function PuppyCard({ puppy }: PuppyCardProps) {
                     <span className="text-slate-300">·</span>
                     <p className="text-slate-500">{puppy.trait}</p>
                 </div>
-                <LikeToggle puppy={puppy}/>
+                <LikeToggle puppy={puppy} setPuppies={setPuppies} />
             </div>
         </li>
     )

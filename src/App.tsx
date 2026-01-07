@@ -54,12 +54,13 @@ function Main() {
                 {/* Search */}
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 {/* Shortlist */}
-                <Shortlist puppies={puppies} />
+                <Shortlist puppies={puppies} setPuppies={setPuppies} />
             </div>
             {/* Puppies list */}
             <PuppiesList
                 searchQuery={searchQuery}
                 puppies={puppies}
+                setPuppies={setPuppies}
             />
             {/* New Puppy form */}
             <NewPuppyForm puppies={puppies} setPuppies={setPuppies} />
