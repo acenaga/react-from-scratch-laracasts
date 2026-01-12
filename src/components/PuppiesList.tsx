@@ -1,4 +1,4 @@
-import { type Puppy } from "../types/index";
+import { type Puppy } from "../types";
 import { LikeToggle } from "./LikeToggle"
 export function PuppiesList({ puppies }: { puppies: Puppy[] }) {
     return (
